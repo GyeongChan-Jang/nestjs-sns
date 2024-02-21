@@ -12,7 +12,11 @@ export class UsersController {
     @Body("password") password,
     @Body("email") email,
   ) {
-    return this.usersService.createUser(nickname, email, password);
+    return this.usersService.createUser({
+      nickname,
+      email,
+      password
+    });
   }
 
   @Get()
