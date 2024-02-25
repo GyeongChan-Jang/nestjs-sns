@@ -1,4 +1,15 @@
-import {Body, Controller, Delete, Get, NotFoundException, Param, Post, Put} from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put
+} from "@nestjs/common";
 import {PostModel, PostsService} from "./posts.service";
 
 @Controller("posts")
@@ -12,8 +23,8 @@ export class PostsController {
   }
 
   @Get(":id")
-  getPost(@Param("id") id: string) {
-    return this.postsService.getPostById(+id);
+  getPost(@Param("id", ParseIntPipe) id: number) {
+    return this.postsService.getPostById(id);
   }
 
   // 메서드 이름 + path
@@ -21,7 +32,9 @@ export class PostsController {
   postPosts(
     @Body("authorId") authorId: number,
     @Body("title") title: string,
-    @Body("content") content: string
+    @Body("content") content: string,
+    // new 생성자를 사용하면 호출시마다 생성됨: 파이프 클래스를 사용하는 것은 nest IOC 에서 주입해줌
+    @Body('isPublic', new DefaultValuePipe(true)) isPublic: boolean
   ) {
     return this.postsService.createPost(authorId, title, content);
   }

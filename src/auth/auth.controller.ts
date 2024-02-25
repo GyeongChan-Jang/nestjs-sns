@@ -1,5 +1,6 @@
 import {Body, Controller, Post, Headers} from '@nestjs/common';
 import { AuthService } from './auth.service';
+import {MaxLengthPipe, MinLengthPipe} from "./pipe/password.pipe";
 
 @Controller('auth')
 export class AuthController {
@@ -10,9 +11,10 @@ export class AuthController {
   postRegisterEmail(
       @Body('nickname') nickname,
       @Body('email') email,
-      @Body('password') password
+      @Body('password', new MaxLengthPipe(8), new MinLengthPipe(3)) password: string
   ) {
     return this.authService.registerWithEmail({
+      // Pipe 에서 에러가 발생하므로 유저 생성되지 않음.
       nickname,
       email,
       password
