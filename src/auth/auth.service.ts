@@ -52,9 +52,6 @@ export class AuthService {
         const decoded = this.jwtService.verify(token, {
             secret: JWT_SECRET
         })
-
-        console.log(decoded) // 유저 정보
-
         // sub: id
         // email: email
         // type: 'access' | 'refresh'
